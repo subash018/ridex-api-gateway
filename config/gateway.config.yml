@@ -1,0 +1,40 @@
+http:
+  port: 8080
+
+apiEndpoints:
+  service1:
+    host: '*'
+    paths:
+      - '/api/*'
+  service2:
+    host: '*'
+    paths:
+      - '/rest/*'
+
+serviceEndpoints:
+  service1:
+    url: 'http://localhost:3000'
+  service2:
+    url: 'http://localhost:3001'
+
+policies:
+  - token-validator
+  - proxy
+
+pipelines:
+  service1Pipeline:
+    apiEndpoints:
+      - service1
+    policies:
+      - token-validator: {}
+      - proxy:
+          - action:
+              serviceEndpoint: service1
+  service2Pipeline:
+    apiEndpoints:
+      - service2
+    policies:
+      - token-validator: {}
+      - proxy:
+          - action:
+              serviceEndpoint: service2

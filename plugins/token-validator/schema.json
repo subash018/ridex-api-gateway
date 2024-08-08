@@ -1,0 +1,7 @@
+{
+    "$id": "http://express-gateway.io/schemas/policies/token-validator.json",
+    "type": "object",
+    "properties": {},
+    "required": []
+  }
+  
