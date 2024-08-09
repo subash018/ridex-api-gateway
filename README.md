@@ -11,9 +11,9 @@ Before you begin, ensure you have the following installed:
 ### Step 1: **Install Express Gateway**:
     - Ensure you have Node.js installed.
     - Install Express Gateway globally using npm:
-    ```bash
+    
     npm install -g express-gateway
-    ```
+    
 
 ### Step 2: **Create a new Express Gateway instance**:
     - Navigate to the directory where you want to create your gateway instance.
