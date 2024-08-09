@@ -18,9 +18,9 @@ Before you begin, ensure you have the following installed:
 ### Step 2: **Create a new Express Gateway instance**:
     - Navigate to the directory where you want to create your gateway instance.
     - Use the `eg` command to create a new gateway:
-    ```bash
+    
     eg gateway create my-gateway
-    ```
+    
     - Follow the prompts to set up your gateway. This will generate the necessary files and folders.
 
 ## Project Structure
