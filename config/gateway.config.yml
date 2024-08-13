@@ -2,6 +2,20 @@ http:
   port: 8080
 
 apiEndpoints:
+  isolation-api:
+    host: '*'
+    paths:
+      - '/isolation/v1'  # Added the missing closing quotation mark
+  tenant-api:
+    host: '*'
+    paths:
+      - '/tenant/v1'
+  auth-api:
+    host: '*'
+    paths:
+      - '/auth/v1/'
+
+  # Replace with your actual microservices    
   service1:
     host: '*'
     paths:
@@ -10,23 +24,73 @@ apiEndpoints:
     host: '*'
     paths:
       - '/rest/*'
+      - '/rpc/*'    
 
 serviceEndpoints:
+  isolation-api:
+    url: 'http://3.220.161.171:4007/api/v1'
+  tenant-api:
+    url: 'http://3.220.161.171:4006/api/v1'
+  auth-api:
+    url: 'http://3.220.161.171:4005'
+  project-setup-api:
+    url: 'http://3.220.161.171:4008/api/v1'
+  auth-v1-token:
+    url: 'http://3.220.161.171:4005/api/v1/token'
+  auth-v1-open-verifyEmail:
+    url: 'http://3.220.161.171:4005/api/v1/verifyEmail'
+  auth-v1-open-resetPassword:
+    url: 'http://3.220.161.171:4005/api/v1/resetPassword'
+
+  # Replace with your actual microservices
   service1:
     url: 'http://localhost:3000'
   service2:
-    url: 'http://localhost:3001'
+    url: 'http://localhost:3001'  
 
 policies:
+  - cors
   - token-validator
   - proxy
 
 pipelines:
+  isolation-apiPipeline:
+    apiEndpoints:
+      - isolation-api
+    policies:
+      # - token-validator: {} (Uncomment if you decide to use this policy)
+      - proxy:
+          action:
+            serviceEndpoint: isolation-api
+  tenant-apiPipeline:
+    apiEndpoints:
+      - tenant-api
+    policies:
+      # - token-validator: {} (Uncomment if you decide to use this policy)
+      - proxy:
+          action:
+            serviceEndpoint: tenant-api
+  auth-apiPipeline:
+    apiEndpoints:
+      - auth-api
+    policies:
+      # - token-validator: {} (Uncomment if you decide to use this policy)
+      - proxy:
+          action:
+            serviceEndpoint: auth-api
+            stripPath: true  # Assuming this is supported by your proxy setup
+
+# Replace with your actual microservices pipeline
   service1Pipeline:
     apiEndpoints:
       - service1
     policies:
       - token-validator: {}
+      - cors: 
+            action:
+              origin: '*'
+              methods: '*'
+              allowedHeaders: '*' 
       - proxy:
           - action:
               serviceEndpoint: service1
@@ -35,6 +99,11 @@ pipelines:
       - service2
     policies:
       - token-validator: {}
+      - cors: 
+            action:
+              origin: '*'
+              methods: '*'
+              allowedHeaders: '*'
       - proxy:
           - action:
-              serviceEndpoint: service2
+              serviceEndpoint: service2          

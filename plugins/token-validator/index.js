@@ -7,8 +7,16 @@ module.exports = {
       name: 'token-validator',
       policy: (actionParams) => {
         return (req, res, next) => {
+
+          // Handle OPTIONS requests separately
+          if (req.method === 'OPTIONS') {
+            // console.log('Handling OPTIONS request');
+            return next(); // Proceed to next for preflight requests
+          }
+
           // Custom authorization logic here
           const authHeader = req.headers['authorization'];
+
           if (!authHeader) {
             console.error('Authorization header is missing');
             return res.status(401).json({ message: 'Unauthorized. Missing Authorization header' });

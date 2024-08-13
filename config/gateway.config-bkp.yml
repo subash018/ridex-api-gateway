@@ -1,0 +1,52 @@
+http:
+  port: 8080
+
+apiEndpoints:
+  service1:
+    host: '*'
+    paths:
+      - '/api/*'
+  service2:
+    host: '*'
+    paths:
+      - '/rest/*'
+      - '/rpc/*'
+
+serviceEndpoints:
+  service1:
+    url: 'http://localhost:3000'
+  service2:
+    url: 'http://localhost:3001'
+
+policies:
+  - cors
+  - token-validator
+  - proxy
+
+pipelines:
+  service1Pipeline:
+    apiEndpoints:
+      - service1
+    policies:
+      - token-validator: {}
+      - cors: 
+            action:
+              origin: '*'
+              methods: '*'
+              allowedHeaders: '*' 
+      - proxy:
+          - action:
+              serviceEndpoint: service1
+  service2Pipeline:
+    apiEndpoints:
+      - service2
+    policies:
+      - token-validator: {}
+      - cors: 
+            action:
+              origin: '*'
+              methods: '*'
+              allowedHeaders: '*'
+      - proxy:
+          - action:
+              serviceEndpoint: service2
