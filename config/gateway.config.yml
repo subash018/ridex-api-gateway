@@ -45,7 +45,19 @@ apiEndpoints:
   rest-v1:
     host: '*'
     paths:
-      - '/rest/v1/*'                      
+      - '/rest/v1/passengers/'
+      - '/rest/v1/corporates/'
+      - '/rest/v1/drivers/'
+
+  fleet-v1:
+    host: '*'
+    paths:
+      - '/rest/v1/assetmakes/'
+      - '/rest/v1/assetmodels/'
+      - '/rest/v1/assetdevicelogs/'
+      - '/rest/v1/assetdriverlogs/'
+      - '/rest/v1/assets/'
+      - '/rest/v1/devices/'                   
 
 serviceEndpoints:
   isolation-api:
@@ -79,7 +91,9 @@ serviceEndpoints:
 
   # Rest paths
   rest-v1:
-    url: 'http://192.168.1.11:6001/rest/v1'            
+    url: 'http://192.168.1.11:6001'
+  fleet-v1:
+    url: 'http://192.168.1.11:6003'              
 
 policies:
   - cors
@@ -225,4 +239,19 @@ pipelines:
       - proxy:
           - action:
               serviceEndpoint: rest-v1       
-              stripPath: true                                                              
+              stripPath: false
+
+  fleetV1Pipeline:
+    apiEndpoints:
+      - fleet-v1
+    policies:
+      - token-validator: {}
+      - cors: 
+            action:
+              origin: '*'
+              methods: '*'
+              allowedHeaders: '*'
+      - proxy:
+          - action:
+              serviceEndpoint: fleet-v1       
+              stripPath: false                                                                          

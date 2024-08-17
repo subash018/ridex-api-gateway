@@ -50,7 +50,7 @@ module.exports = {
           const uniqueId = claims.uniqueId; // Assuming 'uniqueId' is a claim in your JWT payload
 
           // Set the extracted values in the headers
-          req.headers['x-user-id'] = userId;
+          req.headers['x-user-id'] = userId || "";
           req.headers['x-user-level'] = userLevel || "";
           req.headers['x-tenant-id'] = uniqueId || "";
 
