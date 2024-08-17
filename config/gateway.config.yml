@@ -1,52 +1,85 @@
 http:
-  port: 8080
+  port: 8000
 
 apiEndpoints:
   isolation-api:
     host: '*'
     paths:
-      - '/isolation/v1'  # Added the missing closing quotation mark
+      - '/isolation/v1/*'  # Added the missing closing quotation mark
   tenant-api:
     host: '*'
     paths:
-      - '/tenant/v1'
+      - '/tenant/v1/*'
   auth-api:
     host: '*'
     paths:
-      - '/auth/v1/'
+      - '/auth/v1/*'
 
   # Replace with your actual microservices    
-  service1:
+  sb:
     host: '*'
     paths:
-      - '/api/*'
-  service2:
+      - '/sb/v1/*'
+  ag:
     host: '*'
     paths:
-      - '/rest/*'
-      - '/rpc/*'    
+      - '/ag/v1/*'
+  tps:
+    host: '*'
+    paths:
+      - '/tps/v1/*'
+  quk:
+    host: '*'
+    paths:
+      - '/quk/v1/*' 
+  tn:
+    host: '*'
+    paths:
+      - '/tn/v1/*'
+      - '/rest/v2/*'
+  tq:
+    host: '*'
+    paths:
+      - '/tq/v1/*'
+
+  rest-v1:
+    host: '*'
+    paths:
+      - '/rest/v1/*'                      
 
 serviceEndpoints:
   isolation-api:
-    url: 'http://3.220.161.171:4007/api/v1'
+    url: 'http://192.168.1.11:4007/api/v1'
   tenant-api:
-    url: 'http://3.220.161.171:4006/api/v1'
+    url: 'http://192.168.1.11:4006/api/v1'
   auth-api:
-    url: 'http://3.220.161.171:4005'
+    url: 'http://192.168.1.2:4005/api/v1'
   project-setup-api:
-    url: 'http://3.220.161.171:4008/api/v1'
+    url: 'http://192.168.1.11:4008/api/v1'
   auth-v1-token:
-    url: 'http://3.220.161.171:4005/api/v1/token'
+    url: 'http://192.168.1.11:4005/api/v1/token'
   auth-v1-open-verifyEmail:
-    url: 'http://3.220.161.171:4005/api/v1/verifyEmail'
+    url: 'http://192.168.1.11:4005/api/v1/verifyEmail'
   auth-v1-open-resetPassword:
-    url: 'http://3.220.161.171:4005/api/v1/resetPassword'
+    url: 'http://192.168.1.11:4005/api/v1/resetPassword'
 
   # Replace with your actual microservices
-  service1:
-    url: 'http://localhost:3000'
-  service2:
-    url: 'http://localhost:3001'  
+  sb:
+    url: 'http://192.168.1.2:4001/api/v1'
+  ag:
+    url: 'http://192.168.1.2:4002/api/v1'
+  tps:
+    url: 'http://192.168.1.2:4008/api/v1'
+  quk:
+    url: 'http://192.168.1.11:4003/api/v1'
+  tn:
+    url: 'http://192.168.1.2:4004/api/v1'
+  tq:
+    url: 'http://192.168.1.10:4009/api/v1' 
+
+  # Rest paths
+  rest-v1:
+    url: 'http://192.168.1.11:6001/rest/v1'            
 
 policies:
   - cors
@@ -58,34 +91,52 @@ pipelines:
     apiEndpoints:
       - isolation-api
     policies:
-      # - token-validator: {} (Uncomment if you decide to use this policy)
+      - token-validator: {}
+      - cors: 
+            action:
+              origin: '*'
+              methods: '*'
+              allowedHeaders: '*'
       - proxy:
           action:
             serviceEndpoint: isolation-api
+            stripPath: true
+
   tenant-apiPipeline:
     apiEndpoints:
       - tenant-api
     policies:
-      # - token-validator: {} (Uncomment if you decide to use this policy)
+      - token-validator: {} # (Uncomment if you decide to use this policy)
+      - cors: 
+            action:
+              origin: '*'
+              methods: '*'
+              allowedHeaders: '*'
       - proxy:
           action:
             serviceEndpoint: tenant-api
+            stripPath: true
+
   auth-apiPipeline:
     apiEndpoints:
       - auth-api
     policies:
       # - token-validator: {} (Uncomment if you decide to use this policy)
+      - cors: 
+            action:
+              origin: '*'
+              methods: '*'
+              allowedHeaders: '*'
       - proxy:
           action:
             serviceEndpoint: auth-api
             stripPath: true  # Assuming this is supported by your proxy setup
 
 # Replace with your actual microservices pipeline
-  service1Pipeline:
+  sbPipeline:
     apiEndpoints:
-      - service1
+      - sb
     policies:
-      - token-validator: {}
       - cors: 
             action:
               origin: '*'
@@ -93,10 +144,77 @@ pipelines:
               allowedHeaders: '*' 
       - proxy:
           - action:
-              serviceEndpoint: service1
-  service2Pipeline:
+              serviceEndpoint: sb
+              stripPath: true
+  agPipeline:
     apiEndpoints:
-      - service2
+      - ag
+    policies:
+      - cors: 
+            action:
+              origin: '*'
+              methods: '*'
+              allowedHeaders: '*'
+      - proxy:
+          - action:
+              serviceEndpoint: ag       
+              stripPath: true
+  tpsPipeline:
+    apiEndpoints:
+      - tps
+    policies:
+      - cors: 
+            action:
+              origin: '*'
+              methods: '*'
+              allowedHeaders: '*'
+      - proxy:
+          - action:
+              serviceEndpoint: tps       
+              stripPath: true
+  qukPipeline:
+    apiEndpoints:
+      - quk
+    policies:
+      - cors: 
+            action:
+              origin: '*'
+              methods: '*'
+              allowedHeaders: '*'
+      - proxy:
+          - action:
+              serviceEndpoint: quk       
+              stripPath: true
+  tnPipeline:
+    apiEndpoints:
+      - tn
+    policies:
+      - cors: 
+            action:
+              origin: '*'
+              methods: '*'
+              allowedHeaders: '*'
+      - proxy:
+          - action:
+              serviceEndpoint: tn       
+              stripPath: true
+  tqPipeline:
+    apiEndpoints:
+      - tq
+    policies:
+      - cors: 
+            action:
+              origin: '*'
+              methods: '*'
+              allowedHeaders: '*'
+      - proxy:
+          - action:
+              serviceEndpoint: tq       
+              stripPath: true
+
+  restV1Pipeline:
+    apiEndpoints:
+      - rest-v1
     policies:
       - token-validator: {}
       - cors: 
@@ -106,4 +224,5 @@ pipelines:
               allowedHeaders: '*'
       - proxy:
           - action:
-              serviceEndpoint: service2          
+              serviceEndpoint: rest-v1       
+              stripPath: true                                                              

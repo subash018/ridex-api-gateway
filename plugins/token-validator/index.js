@@ -51,8 +51,8 @@ module.exports = {
 
           // Set the extracted values in the headers
           req.headers['x-user-id'] = userId;
-          req.headers['x-user-level'] = userLevel;
-          req.headers['x-tenant-id'] = uniqueId;
+          req.headers['x-user-level'] = userLevel || "";
+          req.headers['x-tenant-id'] = uniqueId || "";
 
           // Dynamically set level IDs based on claims
           Object.keys(claims).forEach((key) => {
