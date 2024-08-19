@@ -9,7 +9,13 @@ apiEndpoints:
   tenant-api:
     host: '*'
     paths:
-      - '/tenant/v1/*'
+      - '/tenant/v1/tenant/'
+
+  company-api:
+    host: '*'
+    paths:
+      - '/tenant/v1/company/' 
+
   auth-api:
     host: '*'
     paths:
@@ -42,38 +48,49 @@ apiEndpoints:
     paths:
       - '/tq/v1/*'
 
+  doc-v1:
+    host: '*'
+    paths:
+      - '/storage/v1/*'    
+
   rest-v1:
     host: '*'
     paths:
-      - '/rest/v1/passengers/'
-      - '/rest/v1/corporates/'
-      - '/rest/v1/drivers/'
+      - '/rest/v1/passengers'
+      - '/rest/v1/passengers/*'
+      - '/rest/v1/corporates'
+      - '/rest/v1/corporates/*'
+      - '/rest/v1/drivers'
+      - '/rest/v1/drivers/*'
 
   fleet-v1:
     host: '*'
     paths:
-      - '/rest/v1/assetmakes/'
-      - '/rest/v1/assetmodels/'
+      - '/rest/v1/assetmake/'
+      - '/rest/v1/assetmodel/'
       - '/rest/v1/assetdevicelogs/'
       - '/rest/v1/assetdriverlogs/'
-      - '/rest/v1/assets/'
-      - '/rest/v1/devices/'                   
+      - '/rest/v1/assetgroup/'
+      - '/rest/v1/asset/'
+      - '/rest/v1/device/'                   
 
 serviceEndpoints:
   isolation-api:
-    url: 'http://192.168.1.11:4007/api/v1'
+    url: 'http://192.168.1.7:4007/api/v1'
   tenant-api:
-    url: 'http://192.168.1.11:4006/api/v1'
+    url: 'http://192.168.1.7:4006/api/v1/tenant'
+  company-api:
+    url: 'http://192.168.1.7:4006/api/v1/company'  
   auth-api:
-    url: 'http://192.168.1.2:4005/api/v1'
+    url: 'http://192.168.1.7:4005/api/v1'
   project-setup-api:
-    url: 'http://192.168.1.11:4008/api/v1'
+    url: 'http://192.168.1.7:4008/api/v1'
   auth-v1-token:
-    url: 'http://192.168.1.11:4005/api/v1/token'
+    url: 'http://192.168.1.7:4005/api/v1/token'
   auth-v1-open-verifyEmail:
-    url: 'http://192.168.1.11:4005/api/v1/verifyEmail'
+    url: 'http://192.168.1.7:4005/api/v1/verifyEmail'
   auth-v1-open-resetPassword:
-    url: 'http://192.168.1.11:4005/api/v1/resetPassword'
+    url: 'http://192.168.1.7:4005/api/v1/resetPassword'
 
   # Replace with your actual microservices
   sb:
@@ -83,17 +100,20 @@ serviceEndpoints:
   tps:
     url: 'http://192.168.1.2:4008/api/v1'
   quk:
-    url: 'http://192.168.1.11:4003/api/v1'
+    url: 'http://192.168.1.7:4003/api/v1'
   tn:
     url: 'http://192.168.1.2:4004/api/v1'
   tq:
     url: 'http://192.168.1.10:4009/api/v1' 
 
+  doc-v1:
+      url: 'http://192.168.1.7:3000/api/v1'
+
   # Rest paths
   rest-v1:
-    url: 'http://192.168.1.11:6001'
+    url: 'http://192.168.1.7:6001'
   fleet-v1:
-    url: 'http://192.168.1.11:6003'              
+    url: 'http://192.168.1.7:6003'              
 
 policies:
   - cors
@@ -130,6 +150,21 @@ pipelines:
           action:
             serviceEndpoint: tenant-api
             stripPath: true
+
+  company-apiPipeline:
+    apiEndpoints:
+      - company-api
+    policies:
+      - token-validator: {} # (Uncomment if you decide to use this policy)
+      - cors: 
+            action:
+              origin: '*'
+              methods: '*'
+              allowedHeaders: '*'
+      - proxy:
+          action:
+            serviceEndpoint: company-api
+            stripPath: true          
 
   auth-apiPipeline:
     apiEndpoints:
@@ -224,6 +259,21 @@ pipelines:
       - proxy:
           - action:
               serviceEndpoint: tq       
+              stripPath: true
+
+  docV1Pipeline:
+    apiEndpoints:
+      - doc-v1
+    policies:
+      - token-validator: {}
+      - cors: 
+            action:
+              origin: '*'
+              methods: '*'
+              allowedHeaders: '*'
+      - proxy:
+          - action:
+              serviceEndpoint: doc-v1       
               stripPath: true
 
   restV1Pipeline:
