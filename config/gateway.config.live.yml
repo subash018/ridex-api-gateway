@@ -82,47 +82,47 @@ apiEndpoints:
 
 serviceEndpoints:
   isolation-api:
-    url: 'http://192.168.1.7:4007/api/v1'
+    url: 'http://3.220.161.171:4007/api/v1'
   tenant-api:
-    url: 'http://192.168.1.7:4006/api/v1/tenant'
+    url: 'http://3.220.161.171:4006/api/v1/tenant'
   company-api:
-    url: 'http://192.168.1.7:4006/api/v1/company'  
+    url: 'http://3.220.161.171:4006/api/v1/company'  
   auth-api:
-    url: 'http://192.168.1.7:4005/api/v1'
+    url: 'http://3.220.161.171:4005/api/v1'
   project-setup-api:
-    url: 'http://192.168.1.7:4008/api/v1'
+    url: 'http://3.220.161.171:4008/api/v1'
   auth-v1-token:
-    url: 'http://192.168.1.7:4005/api/v1/token'
+    url: 'http://3.220.161.171:4005/api/v1/token'
   auth-v1-open-verifyEmail:
-    url: 'http://192.168.1.7:4005/api/v1/verifyEmail'
+    url: 'http://3.220.161.171:4005/api/v1/verifyEmail'
   auth-v1-open-resetPassword:
-    url: 'http://192.168.1.7:4005/api/v1/resetPassword'
+    url: 'http://3.220.161.171:4005/api/v1/resetPassword'
 
   # Replace with your actual microservices
   sb:
-    url: 'http://192.168.1.2:4001/api/v1'
+    url: 'http://3.220.161.171:4001/api/v1'
   ag:
-    url: 'http://192.168.1.2:4002/api/v1'
+    url: 'http://3.220.161.171:4002/api/v1'
   tps:
-    url: 'http://192.168.1.2:4008/api/v1'
+    url: 'http://3.220.161.171:4008/api/v1'
   quk:
-    url: 'http://192.168.1.7:4003/api/v1'
+    url: 'http://3.220.161.171:4003/api/v1'
   tn:
-    url: 'http://192.168.1.2:4004/api/v1'
+    url: 'http://3.220.161.171:4004/api/v1'
   tq:
     url: 'http://192.168.1.10:4009/api/v1' 
 
   doc-v1:
-    url: 'http://192.168.1.7:6011/api/v1'
+    url: 'http://3.220.161.171:6011/api/v1'
 
   notification-v1:
-    url: 'http://192.168.1.19:6012/api/v1'    
+    url: 'http://3.220.161.171:6012/api/v1'    
 
   # Rest paths
   rest-v1:
-    url: 'http://192.168.1.7:6002'
+    url: 'http://3.220.161.171:6002'
   fleet-v1:
-    url: 'http://192.168.1.7:6003'                
+    url: 'http://3.220.161.171:6003'                
 
 policies:
   - cors
