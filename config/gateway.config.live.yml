@@ -9,12 +9,19 @@ apiEndpoints:
   tenant-api:
     host: '*'
     paths:
-      - '/tenant/v1/tenant/'
+      - '/auth/v1/tenant'
+      - '/auth/v1/tenant/*'
 
   company-api:
     host: '*'
     paths:
-      - '/tenant/v1/company/' 
+      - '/auth/v1/company/'
+
+  plan-api:
+    host: '*'
+    paths:
+      - '/auth/v1/plan'
+      - '/auth/v1/plan/*'     
 
   auth-api:
     host: '*'
@@ -56,18 +63,32 @@ apiEndpoints:
   notification-v1:
     host: '*'
     paths:
-      - '/notification/v1/*'        
+      - '/notification/v1/*'      
 
-  rest-v1:
+
+  ride-v1:
+    host: '*'
+    paths:
+      - '/rest/v1/drivers'
+      - '/rest/v1/drivers/*'
+      - '/rest/v1/rpc/drivers/*'
+      - '/rest/v1/logs/'
+      - '/rest/v1/logs/*'
+      - '/rest/v1/common/'
+      - '/rest/v1/common/*'
+      - '/rest/v1/rides/'
+      - '/rest/v1/rides/*'
+
+
+  origanization-v1:
     host: '*'
     paths:
       - '/rest/v1/passengers'
       - '/rest/v1/passengers/*'
       - '/rest/v1/corporates'
       - '/rest/v1/corporates/*'
-      - '/rest/v1/drivers'
-      - '/rest/v1/drivers/*'
-      - '/rest/v1/rpc/drivers/*'
+      - '/rest/v1/sos'
+      - '/rest/v1/sos/*'
 
   fleet-v1:
     host: '*'
@@ -86,7 +107,9 @@ serviceEndpoints:
   tenant-api:
     url: 'http://3.220.161.171:4006/api/v1/tenant'
   company-api:
-    url: 'http://3.220.161.171:4006/api/v1/company'  
+    url: 'http://3.220.161.171:4006/api/v1/company'
+  plan-api:
+    url: 'http://3.220.161.171:4006/api/v1/plan'    
   auth-api:
     url: 'http://3.220.161.171:4005/api/v1'
   project-setup-api:
@@ -110,7 +133,7 @@ serviceEndpoints:
   tn:
     url: 'http://3.220.161.171:4004/api/v1'
   tq:
-    url: 'http://192.168.1.10:4009/api/v1' 
+    url: 'http://3.220.161.171:4009/api/v1' 
 
   doc-v1:
     url: 'http://3.220.161.171:6011/api/v1'
@@ -119,10 +142,12 @@ serviceEndpoints:
     url: 'http://3.220.161.171:6012/api/v1'    
 
   # Rest paths
-  rest-v1:
+  ride-v1:
+    url: 'http://3.220.161.171:6001'
+  origanization-v1:
     url: 'http://3.220.161.171:6002'
   fleet-v1:
-    url: 'http://3.220.161.171:6003'                
+    url: 'http://3.220.161.171:6003'                  
 
 policies:
   - cors
@@ -173,7 +198,22 @@ pipelines:
       - proxy:
           action:
             serviceEndpoint: company-api
-            stripPath: true          
+            stripPath: true
+ 
+  plan-apiPipeline:
+    apiEndpoints:
+      - plan-api
+    policies:
+      - token-validator: {} # (Uncomment if you decide to use this policy)
+      - cors: 
+            action:
+              origin: '*'
+              methods: '*'
+              allowedHeaders: '*'
+      - proxy:
+          action:
+            serviceEndpoint: plan-api
+            stripPath: true                    
 
   auth-apiPipeline:
     apiEndpoints:
@@ -300,9 +340,9 @@ pipelines:
               serviceEndpoint: notification-v1       
               stripPath: true            
 
-  restV1Pipeline:
+  rideV1Pipeline:
     apiEndpoints:
-      - rest-v1
+      - ride-v1
     policies:
       - token-validator: {}
       - cors: 
@@ -312,7 +352,22 @@ pipelines:
               allowedHeaders: '*'
       - proxy:
           - action:
-              serviceEndpoint: rest-v1       
+              serviceEndpoint: ride-v1       
+              stripPath: false
+
+  origanizationV1Pipeline:
+    apiEndpoints:
+      - origanization-v1
+    policies:
+      - token-validator: {}
+      - cors: 
+            action:
+              origin: '*'
+              methods: '*'
+              allowedHeaders: '*'
+      - proxy:
+          - action:
+              serviceEndpoint: origanization-v1       
               stripPath: false
 
   fleetV1Pipeline:
