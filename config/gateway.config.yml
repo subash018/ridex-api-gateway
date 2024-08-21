@@ -82,21 +82,21 @@ apiEndpoints:
 
 serviceEndpoints:
   isolation-api:
-    url: 'http://192.168.1.7:4007/api/v1'
+    url: 'http://192.168.1.21:4007/api/v1'
   tenant-api:
-    url: 'http://192.168.1.7:4006/api/v1/tenant'
+    url: 'http://192.168.1.21:4006/api/v1/tenant'
   company-api:
-    url: 'http://192.168.1.7:4006/api/v1/company'  
+    url: 'http://192.168.1.21:4006/api/v1/company'  
   auth-api:
-    url: 'http://192.168.1.7:4005/api/v1'
+    url: 'http://192.168.1.21:4005/api/v1'
   project-setup-api:
-    url: 'http://192.168.1.7:4008/api/v1'
+    url: 'http://192.168.1.21:4008/api/v1'
   auth-v1-token:
-    url: 'http://192.168.1.7:4005/api/v1/token'
+    url: 'http://192.168.1.21:4005/api/v1/token'
   auth-v1-open-verifyEmail:
-    url: 'http://192.168.1.7:4005/api/v1/verifyEmail'
+    url: 'http://192.168.1.21:4005/api/v1/verifyEmail'
   auth-v1-open-resetPassword:
-    url: 'http://192.168.1.7:4005/api/v1/resetPassword'
+    url: 'http://192.168.1.21:4005/api/v1/resetPassword'
 
   # Replace with your actual microservices
   sb:
@@ -106,23 +106,23 @@ serviceEndpoints:
   tps:
     url: 'http://192.168.1.2:4008/api/v1'
   quk:
-    url: 'http://192.168.1.7:4003/api/v1'
+    url: 'http://192.168.1.21:4003/api/v1'
   tn:
     url: 'http://192.168.1.2:4004/api/v1'
   tq:
     url: 'http://192.168.1.10:4009/api/v1' 
 
   doc-v1:
-    url: 'http://192.168.1.7:6011/api/v1'
+    url: 'http://192.168.1.21:6011/api/v1'
 
   notification-v1:
-    url: 'http://192.168.1.19:6012/api/v1'    
+    url: 'http://192.168.1.17:6012/api/v1'    
 
   # Rest paths
   rest-v1:
-    url: 'http://192.168.1.7:6002'
+    url: 'http://192.168.1.21:6002'
   fleet-v1:
-    url: 'http://192.168.1.7:6003'                
+    url: 'http://192.168.1.21:6003'                
 
 policies:
   - cors
