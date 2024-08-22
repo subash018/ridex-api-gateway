@@ -99,6 +99,7 @@ apiEndpoints:
       - '/rest/v1/assetdriverlogs/'
       - '/rest/v1/assetgroup/'
       - '/rest/v1/asset/'
+      - '/rest/v1/asset/*'
       - '/rest/v1/device/'                   
 
 serviceEndpoints:
