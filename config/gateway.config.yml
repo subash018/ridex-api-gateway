@@ -78,6 +78,8 @@ apiEndpoints:
       - '/rest/v1/common/*'
       - '/rest/v1/rides/'
       - '/rest/v1/rides/*'
+      - '/rest/v1/fareConfig'
+      - '/rest/v1/fareConfig/*'
 
 
   origanization-v1:
@@ -100,7 +102,15 @@ apiEndpoints:
       - '/rest/v1/assetgroup/'
       - '/rest/v1/asset/'
       - '/rest/v1/asset/*'
-      - '/rest/v1/device/'                   
+      - '/rest/v1/device/'
+
+  go-lang-v1:
+    host: '*'
+    paths:
+      - '/api/v1/*'
+      - '/api/v1/updateHistory'
+      - '/api/v1/getHistoryData'
+      - '/api/v1/getDeviceList'                       
 
 serviceEndpoints:
   isolation-api:
@@ -148,7 +158,11 @@ serviceEndpoints:
   origanization-v1:
     url: 'http://192.168.1.21:6002'
   fleet-v1:
-    url: 'http://192.168.1.21:6003'                  
+    url: 'http://192.168.1.21:6003'
+
+  # Service end point
+  go-lang-v1:
+    url: 'http://192.168.1.2:8809'                    
 
 policies:
   - cors
@@ -384,4 +398,19 @@ pipelines:
       - proxy:
           - action:
               serviceEndpoint: fleet-v1       
-              stripPath: false                                                                          
+              stripPath: false
+
+  go-lang-v1:
+    apiEndpoints:
+      - go-lang-v1
+    policies:
+      - token-validator: {}
+      - cors:
+            action:
+              origin: '*'
+              methods: '*'
+              allowedHeaders: '*'
+      - proxy:
+          action:
+            serviceEndpoint: go-lang-v1
+            stripPath: false  # This ensures the full path is sent to the backend                                                                                      
