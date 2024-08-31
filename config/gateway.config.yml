@@ -78,11 +78,12 @@ apiEndpoints:
       - '/rest/v1/common/*'
       - '/rest/v1/rides/'
       - '/rest/v1/rides/*'
+      - '/rest/v1/chart/*'
       - '/rest/v1/fareConfig'
       - '/rest/v1/fareConfig/*'
 
 
-  origanization-v1:
+  organization-v1:
     host: '*'
     paths:
       - '/rest/v1/passengers'
@@ -114,23 +115,23 @@ apiEndpoints:
 
 serviceEndpoints:
   isolation-api:
-    url: 'http://192.168.1.21:4007/api/v1'
+    url: 'http://192.168.1.25:4007/api/v1'
   tenant-api:
-    url: 'http://192.168.1.21:4006/api/v1/tenant'
+    url: 'http://192.168.1.25:4006/api/v1/tenant'
   company-api:
-    url: 'http://192.168.1.21:4006/api/v1/company'
+    url: 'http://192.168.1.25:4006/api/v1/company'
   plan-api:
-    url: 'http://192.168.1.21:4006/api/v1/plan'    
+    url: 'http://192.168.1.25:4006/api/v1/plan'    
   auth-api:
-    url: 'http://192.168.1.21:4005/api/v1'
+    url: 'http://192.168.1.25:4005/api/v1'
   project-setup-api:
-    url: 'http://192.168.1.21:4008/api/v1'
+    url: 'http://192.168.1.25:4008/api/v1'
   auth-v1-token:
-    url: 'http://192.168.1.21:4005/api/v1/token'
+    url: 'http://192.168.1.25:4005/api/v1/token'
   auth-v1-open-verifyEmail:
-    url: 'http://192.168.1.21:4005/api/v1/verifyEmail'
+    url: 'http://192.168.1.25:4005/api/v1/verifyEmail'
   auth-v1-open-resetPassword:
-    url: 'http://192.168.1.21:4005/api/v1/resetPassword'
+    url: 'http://192.168.1.25:4005/api/v1/resetPassword'
 
   # Replace with your actual microservices
   sb:
@@ -140,29 +141,29 @@ serviceEndpoints:
   tps:
     url: 'http://192.168.1.2:4008/api/v1'
   quk:
-    url: 'http://192.168.1.21:4003/api/v1'
+    url: 'http://192.168.1.25:4003/api/v1'
   tn:
     url: 'http://192.168.1.2:4004/api/v1'
   tq:
     url: 'http://192.168.1.10:4009/api/v1' 
 
   doc-v1:
-    url: 'http://192.168.1.21:6011/api/v1'
+    url: 'http://3.220.161.171:6011/api/v1'
 
   notification-v1:
-    url: 'http://192.168.1.17:6012/api/v1'    
+    url: 'http://192.168.1.25:6012/api/v1'    
 
   # Rest paths
   ride-v1:
-    url: 'http://192.168.1.21:6001'
-  origanization-v1:
-    url: 'http://192.168.1.21:6002'
+    url: 'http://192.168.1.25:6001'
+  organization-v1:
+    url: 'http://192.168.1.25:6002'
   fleet-v1:
-    url: 'http://192.168.1.21:6003'
+    url: 'http://192.168.1.25:6003'
 
   # Service end point
   go-lang-v1:
-    url: 'http://192.168.1.2:8809'                    
+    url: 'http://192.168.1.12:8809'                    
 
 policies:
   - cors
@@ -344,7 +345,7 @@ pipelines:
     apiEndpoints:
       - notification-v1
     policies:
-      # - token-validator: {}
+      - token-validator: {}
       - cors: 
             action:
               origin: '*'
@@ -353,7 +354,7 @@ pipelines:
       - proxy:
           - action:
               serviceEndpoint: notification-v1       
-              stripPath: true            
+              stripPath: true                    
 
   rideV1Pipeline:
     apiEndpoints:
@@ -372,7 +373,7 @@ pipelines:
 
   origanizationV1Pipeline:
     apiEndpoints:
-      - origanization-v1
+      - organization-v1
     policies:
       - token-validator: {}
       - cors: 
@@ -382,7 +383,7 @@ pipelines:
               allowedHeaders: '*'
       - proxy:
           - action:
-              serviceEndpoint: origanization-v1       
+              serviceEndpoint: organization-v1       
               stripPath: false
 
   fleetV1Pipeline:
