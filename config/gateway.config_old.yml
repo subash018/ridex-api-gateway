@@ -27,6 +27,12 @@ apiEndpoints:
     host: '*'
     paths:
       - '/auth/v1/*'
+  
+  auth-v1-open-verifyEmail:
+    host: '*'
+    paths:
+      - '/api/v1/verifyEmail'
+      - '/api/v1/verifyEmail/*'
 
   # Replace with your actual microservices    
   sb:
@@ -83,7 +89,7 @@ apiEndpoints:
       - '/rest/v1/fareConfig/*'
 
 
-  origanization-v1:
+  organization-v1:
     host: '*'
     paths:
       - '/rest/v1/passengers'
@@ -115,55 +121,53 @@ apiEndpoints:
 
 serviceEndpoints:
   isolation-api:
-    url: 'http://172.31.75.114:4007/api/v1'
+    url: 'http://192.168.1.17:4007/api/v1'
   tenant-api:
-    url: 'http://172.31.75.114:4006/api/v1/tenant'
+    url: 'http://192.168.1.17:4006/api/v1/tenant'
   company-api:
-    url: 'http://172.31.75.114:4006/api/v1/company'
+    url: 'http://192.168.1.17:4006/api/v1/company'
   plan-api:
-    url: 'http://172.31.75.114:4006/api/v1/plan'    
+    url: 'http://192.168.1.17:4006/api/v1/plan'    
   auth-api:
-    url: 'http://172.31.75.114:4005/api/v1'
-  project-setup-api:
-    url: 'http://172.31.75.114:4008/api/v1'
-  auth-v1-token:
-    url: 'http://172.31.75.114:4005/api/v1/token'
+    url: 'http://192.168.1.17:4005/api/v1'
   auth-v1-open-verifyEmail:
-    url: 'http://172.31.75.114:4005/api/v1/verifyEmail'
+    url: 'http://192.168.1.17:4005/api/v1/verifyEmail'
+  project-setup-api:
+    url: 'http://192.168.1.17:4008/api/v1'
+  auth-v1-token:
+    url: 'http://192.168.1.17:4005/api/v1/token'
   auth-v1-open-resetPassword:
-    url: 'http://172.31.75.114:4005/api/v1/resetPassword'
+    url: 'http://192.168.1.17:4005/api/v1/resetPassword'
 
   # Replace with your actual microservices
   sb:
-    url: 'http://172.31.75.114:4001/api/v1'
+    url: 'http://192.168.1.2:4001/api/v1'
   ag:
-    url: 'http://172.31.75.114:4002/api/v1'
+    url: 'http://192.168.1.2:4002/api/v1'
   tps:
-    url: 'http://172.31.75.114:4008/api/v1'
+    url: 'http://192.168.1.2:4008/api/v1'
   quk:
-    url: 'http://172.31.75.114:4003/api/v1'
+    url: 'http://192.168.1.2:4003/api/v1'
   tn:
-    url: 'http://172.31.75.114:4004/api/v1'
+    url: 'http://192.168.1.2:4004/api/v1'
   tq:
-    url: 'http://172.31.75.114:4009/api/v1' 
-
+    url: 'http://192.168.1.10:4009/api/v1' 
   doc-v1:
-    url: 'http://172.31.75.114:6011/api/v1'
-
+    url: 'http://3.220.161.171:6011/api/v1'
   notification-v1:
-    url: 'http://172.31.75.114:6012/api/v1'    
+    url: 'http://192.168.1.22:6012/api/v1'    
 
   # Rest paths
   ride-v1:
-    url: 'http://172.31.75.114:6001'
-  origanization-v1:
-    url: 'http://172.31.75.114:6002'
+    url: 'http://192.168.1.22:6001'
+  organization-v1:
+    url: 'http://192.168.1.17:6002'
   fleet-v1:
-    url: 'http://172.31.75.114:6003'
+    url: 'http://192.168.1.17:6003'
 
   # Service end point
   go-lang-v1:
-    url: 'http://172.31.75.114:8809'                    
+    url: 'http://192.168.1.21:8809'                    
 
 policies:
   - cors
@@ -244,6 +248,21 @@ pipelines:
       - proxy:
           action:
             serviceEndpoint: auth-api
+            stripPath: true  # Assuming this is supported by your proxy setup
+
+  auth-v1-open-verifyEmail-apiPipeline:
+    apiEndpoints:
+      - auth-v1-open-verifyEmail
+    policies:
+      # - token-validator: {} (Uncomment if you decide to use this policy)
+      - cors: 
+            action:
+              origin: '*'
+              methods: '*'
+              allowedHeaders: '*'
+      - proxy:
+          action:
+            serviceEndpoint: auth-v1-open-verifyEmail
             stripPath: true  # Assuming this is supported by your proxy setup
 
 # Replace with your actual microservices pipeline
@@ -345,7 +364,7 @@ pipelines:
     apiEndpoints:
       - notification-v1
     policies:
-      # - token-validator: {}
+      - token-validator: {}
       - cors: 
             action:
               origin: '*'
@@ -354,7 +373,7 @@ pipelines:
       - proxy:
           - action:
               serviceEndpoint: notification-v1       
-              stripPath: true            
+              stripPath: true                    
 
   rideV1Pipeline:
     apiEndpoints:
@@ -373,7 +392,7 @@ pipelines:
 
   origanizationV1Pipeline:
     apiEndpoints:
-      - origanization-v1
+      - organization-v1
     policies:
       - token-validator: {}
       - cors: 
@@ -383,7 +402,7 @@ pipelines:
               allowedHeaders: '*'
       - proxy:
           - action:
-              serviceEndpoint: origanization-v1       
+              serviceEndpoint: organization-v1       
               stripPath: false
 
   fleetV1Pipeline:

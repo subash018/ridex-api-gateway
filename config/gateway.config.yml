@@ -27,6 +27,12 @@ apiEndpoints:
     host: '*'
     paths:
       - '/auth/v1/*'
+  
+  auth-v1-open-verifyEmail:
+    host: '*'
+    paths:
+      - '/api/v1/verifyEmail'
+      - '/api/v1/verifyEmail/*'
 
   # Replace with your actual microservices    
   sb:
@@ -60,6 +66,11 @@ apiEndpoints:
     paths:
       - '/storage/v1/*'
 
+  doc-temp:
+    host: '*'
+    paths:
+      - '/temp/*'
+
   notification-v1:
     host: '*'
     paths:
@@ -83,7 +94,7 @@ apiEndpoints:
       - '/rest/v1/fareConfig/*'
 
 
-  organization-v1:
+  origanization-v1:
     host: '*'
     paths:
       - '/rest/v1/passengers'
@@ -115,55 +126,58 @@ apiEndpoints:
 
 serviceEndpoints:
   isolation-api:
-    url: 'http://192.168.1.25:4007/api/v1'
+    url: 'http://172.31.30.23:4007/api/v1'
   tenant-api:
-    url: 'http://192.168.1.25:4006/api/v1/tenant'
+    url: 'http://172.31.30.23:4006/api/v1/tenant'
   company-api:
-    url: 'http://192.168.1.25:4006/api/v1/company'
+    url: 'http://172.31.30.23:4006/api/v1/company'
   plan-api:
-    url: 'http://192.168.1.25:4006/api/v1/plan'    
+    url: 'http://172.31.30.23:4006/api/v1/plan'    
   auth-api:
-    url: 'http://192.168.1.25:4005/api/v1'
-  project-setup-api:
-    url: 'http://192.168.1.25:4008/api/v1'
-  auth-v1-token:
-    url: 'http://192.168.1.25:4005/api/v1/token'
+    url: 'http://172.31.30.23:4005/api/v1'
   auth-v1-open-verifyEmail:
-    url: 'http://192.168.1.25:4005/api/v1/verifyEmail'
+    url: 'http://172.31.30.23:4005/api/v1/verifyEmail'
+  project-setup-api:
+    url: 'http://172.31.30.23:4008/api/v1'
+  auth-v1-token:
+    url: 'http://172.31.30.23:4005/api/v1/token'
   auth-v1-open-resetPassword:
-    url: 'http://192.168.1.25:4005/api/v1/resetPassword'
+    url: 'http://172.31.30.23:4005/api/v1/resetPassword'
 
   # Replace with your actual microservices
   sb:
-    url: 'http://192.168.1.2:4001/api/v1'
+    url: 'http://172.31.30.23:4001/api/v1'
   ag:
-    url: 'http://192.168.1.2:4002/api/v1'
+    url: 'http://172.31.30.23:4002/api/v1'
   tps:
-    url: 'http://192.168.1.2:4008/api/v1'
+    url: 'http://172.31.30.23:4008/api/v1'
   quk:
-    url: 'http://192.168.1.25:4003/api/v1'
+    url: 'http://172.31.30.23:4003/api/v1'
   tn:
-    url: 'http://192.168.1.2:4004/api/v1'
+    url: 'http://172.31.30.23:4004/api/v1'
   tq:
-    url: 'http://192.168.1.10:4009/api/v1' 
+    url: 'http://172.31.30.23:4009/api/v1' 
 
   doc-v1:
-    url: 'http://3.220.161.171:6011/api/v1'
+    url: 'http://172.31.30.23:6011/api/v1'
+
+  doc-temp:
+    url: 'http://172.31.30.23:6011/'
 
   notification-v1:
-    url: 'http://192.168.1.25:6012/api/v1'    
+    url: 'http://172.31.30.23:6012/api/v1'    
 
   # Rest paths
   ride-v1:
-    url: 'http://192.168.1.25:6001'
-  organization-v1:
-    url: 'http://192.168.1.25:6002'
+    url: 'http://172.31.30.23:6001'
+  origanization-v1:
+    url: 'http://172.31.30.23:6002'
   fleet-v1:
-    url: 'http://192.168.1.25:6003'
+    url: 'http://172.31.30.23:6003'
 
   # Service end point
   go-lang-v1:
-    url: 'http://192.168.1.12:8809'                    
+    url: 'http://172.31.30.23:8809'                    
 
 policies:
   - cors
@@ -341,6 +355,21 @@ pipelines:
               serviceEndpoint: doc-v1       
               stripPath: true
 
+  doctempPipeline:
+    apiEndpoints:
+      - doc-temp
+    policies:
+      # - token-validator: {}
+      - cors: 
+            action:
+              origin: '*'
+              methods: '*'
+              allowedHeaders: '*'
+      - proxy:
+          - action:
+              serviceEndpoint: doc-temp      
+              stripPath: false
+
   notificationV1Pipeline:
     apiEndpoints:
       - notification-v1
@@ -354,7 +383,7 @@ pipelines:
       - proxy:
           - action:
               serviceEndpoint: notification-v1       
-              stripPath: true                    
+              stripPath: true            
 
   rideV1Pipeline:
     apiEndpoints:
@@ -373,7 +402,7 @@ pipelines:
 
   origanizationV1Pipeline:
     apiEndpoints:
-      - organization-v1
+      - origanization-v1
     policies:
       - token-validator: {}
       - cors: 
@@ -383,7 +412,7 @@ pipelines:
               allowedHeaders: '*'
       - proxy:
           - action:
-              serviceEndpoint: organization-v1       
+              serviceEndpoint: origanization-v1       
               stripPath: false
 
   fleetV1Pipeline:
@@ -400,6 +429,21 @@ pipelines:
           - action:
               serviceEndpoint: fleet-v1       
               stripPath: false
+
+  auth-v1-open-verifyEmail-apiPipeline:
+    apiEndpoints:
+      - auth-v1-open-verifyEmail
+    policies:
+      # - token-validator: {} (Uncomment if you decide to use this policy)
+      - cors: 
+            action:
+              origin: '*'
+              methods: '*'
+              allowedHeaders: '*'
+      - proxy:
+          action:
+            serviceEndpoint: auth-v1-open-verifyEmail
+            stripPath: true  # Assuming this is supported by your proxy setup
 
   go-lang-v1:
     apiEndpoints:
